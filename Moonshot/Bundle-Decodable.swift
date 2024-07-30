@@ -10,7 +10,7 @@ import Foundation
 // for json file loading
 
 extension Bundle {
-    func decode<T>(_ file: String) -> T {
+    func decode<T: Codable>(_ file: String) -> T {
         // throws fatal error if file not found
         guard let url = self.url(forResource: file, withExtension: nil) else {
             fatalError("Failed to locate \(file) in bundle.")
@@ -19,8 +19,13 @@ extension Bundle {
         guard let data = try? Data(contentsOf: url) else {
             fatalError("Failed to load \(file) from bundle.")
         }
-        // throws fatal error if loaded data cannot decode with explainations
+        
         let decoder = JSONDecoder()
+        let formatter = DateFormatter()
+        formatter.dateFormat = "y-MM-dd"
+        decoder.dateDecodingStrategy = .formatted(formatter)
+        
+        // throws fatal error if loaded data cannot decode with explainations
         do {
             return try decoder.decode(T.self, from: data)
         } catch DecodingError.keyNotFound(let key, let context){
