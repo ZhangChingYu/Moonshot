@@ -19,7 +19,7 @@ struct AstronautView: View {
                     .scaledToFit()
                 Text(astronaut.description)
                     .padding()
-            }
+            } 
         }
         .background(.darkBackground)
         .navigationTitle(astronaut.name)
